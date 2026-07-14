@@ -14,6 +14,7 @@ export default {
     async execute(interaction) {
 
         const embed = new EmbedBuilder()
+            import { SlashCommandBuilder, PermissionFlagsBits, PermissionsBitField, ChannelType, MessageFlags } from 'discord.js';
             .setColor(0x2B2D31)
             .setTitle("📖 Emperor's Royal Guard Handbook")
             .setDescription(`
