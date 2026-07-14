@@ -1,11 +1,34 @@
-import { SlashCommandBuilder, PermissionFlagsBits, PermissionsBitField, ChannelType, MessageFlags } from 'discord.js';
-import { createEmbed, successEmbed, infoEmbed, warningEmbed } from '../../utils/embeds.js';
+import {
+    SlashCommandBuilder,
+    PermissionFlagsBits,
+    ChannelType,
+    MessageFlags,
+} from 'discord.js';
+import { successEmbed } from '../../utils/embeds.js';
 import { logEvent } from '../../utils/moderation.js';
 import { logger } from '../../utils/logger.js';
-import { sanitizeMarkdown } from '../../utils/validation.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
+import { sanitizeInput } from '../../utils/validation.js';
+
+const TEXT_CHANNEL_TYPES = [
+    ChannelType.GuildText,
+    ChannelType.GuildAnnouncement,
+];
+
+function resolveTargetChannel(interaction) {
+    const selected = interaction.options.getChannel('channel');
+    if (selected) {
+        return selected;
+    }
+
+    if (!interaction.channel || !TEXT_CHANNEL_TYPES.includes(interaction.channel.type)) {
+        return null;
+    }
+
+    return interaction.channel;
+}
+
 export default {
     data: new SlashCommandBuilder()
         .setName('handbook')
